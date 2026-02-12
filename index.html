@@ -130,6 +130,42 @@
             font-size: 1.05rem;
         }
 
+        .hamburger {
+            display: none;
+            cursor: pointer;
+        }
+
+        .hamburger .bar {
+            display: block;
+            width: 25px;
+            height: 3px;
+            margin: 5px auto;
+            -webkit-transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
+            background-color: var(--text-color-dark);
+        }
+
+        .mobile-nav {
+            display: none;
+            position: absolute;
+            top: var(--header-height);
+            left: 0;
+            width: 100%;
+            background-color: rgba(245, 247, 248, 0.95);
+            backdrop-filter: blur(10px);
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .mobile-nav-link {
+            padding: 15px 0;
+            font-size: 1.2rem;
+            width: 100%;
+            text-align: center;
+        }
+
         /* Hero Section */
         .hero {
             min-height: 100vh;
@@ -139,22 +175,22 @@
             text-align: left;
             padding-top: var(--header-height); /* Offset for fixed header */
             position: relative;
-            overflow: hidden; /* For subtle background dots */
         }
 
         /* Subtle background dots */
-        .hero::before {
+        body::before {
             content: '';
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 10% 20%, rgba(197, 197, 240, 0.1) 0%, transparent 20%),
-                        radial-gradient(circle at 80% 50%, rgba(197, 197, 240, 0.1) 0%, transparent 20%),
-                        radial-gradient(circle at 40% 90%, rgba(197, 197, 240, 0.1) 0%, transparent 20%);
+            background: radial-gradient(circle at 10% 20%, rgba(197, 197, 240, 0.2) 0%, transparent 20%),
+                        radial-gradient(circle at 80% 50%, rgba(197, 197, 240, 0.2) 0%, transparent 20%),
+                        radial-gradient(circle at 40% 90%, rgba(197, 197, 240, 0.2) 0%, transparent 20%);
             background-size: 30% 30%;
             animation: background-move 60s linear infinite;
+            z-index: -1;
         }
 
         @keyframes background-move {
@@ -547,6 +583,95 @@
                 transform: translateY(0);
             }
         }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar-nav {
+                display: none;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .hamburger.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .hamburger.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .mobile-nav.active {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero h2 {
+                font-size: 1.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .about-content {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .honors-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-padding {
+                padding: 60px 0;
+            }
+
+            .project-item h3 {
+                font-size: 1.5rem;
+            }
+
+            .contact p {
+                font-size: 1.2rem;
+            }
+
+            .contact-links {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            .hero-buttons .btn {
+                width: 100%;
+                text-align: center;
+                margin-right: 0;
+            }
+            .nav-item {
+                margin-left: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -560,7 +685,19 @@
                 <li class="nav-item"><a href="#skills" class="nav-link">Skills</a></li>
                 <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
         </nav>
+        <div class="mobile-nav">
+            <a href="#about" class="mobile-nav-link">About</a>
+            <a href="#projects" class="mobile-nav-link">Projects</a>
+            <a href="#experience" class="mobile-nav-link">Experience</a>
+            <a href="#skills" class="mobile-nav-link">Skills</a>
+            <a href="#contact" class="mobile-nav-link">Contact</a>
+        </div>
     </header>
 
     <main>
@@ -790,6 +927,19 @@
     </footer>
 
     <script>
+        const hamburger = document.querySelector(".hamburger");
+        const mobileNav = document.querySelector(".mobile-nav");
+
+        hamburger.addEventListener("click", () => {
+            hamburger.classList.toggle("active");
+            mobileNav.classList.toggle("active");
+        });
+
+        document.querySelectorAll(".mobile-nav-link").forEach(n => n.addEventListener("click", () => {
+            hamburger.classList.remove("active");
+            mobileNav.classList.remove("active");
+        }));
+
         // Header Sticky and Blur Effect
         const header = document.querySelector('.header');
         window.addEventListener('scroll', () => {
